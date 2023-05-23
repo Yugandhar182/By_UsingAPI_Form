@@ -1,66 +1,79 @@
 <script>
+	import { onMount } from 'svelte';
 	import 'bootstrap/dist/css/bootstrap.min.css';
   
-	let fullName = '';
-	let email = '';
-	let mobile = '';
-	let file = null;
+	let formData = {
+	  fullName: '',
+	  email: '',
+	  mobile: ''
+	};
   
-	async function handleSubmit() {
-	  // Create a FormData object to send the file and other data
+	let cvFile;
+  
+	function handleSubmit() {
+	  const jsonData = {
+		fullName: formData.fullName,
+		email: formData.email,
+		mobile: formData.mobile,
+		fileContent: '', // Placeholder for file content (to be updated later)
+		fileName: cvFile ? cvFile.name : '' // Get the file name if available
+	  };
+  
 	  const formData = new FormData();
-	  formData.append('fullName', fullName);
-	  formData.append('email', email);
-	  formData.append('mobile', mobile);
-	  formData.append('file', file);
+	  formData.append('data', JSON.stringify(jsonData));
+	  formData.append('cv', cvFile);
   
-	  try {
-		// Make a POST request to your API endpoint
-		const response = await fetch('https://api.recruitly.io/api/cvsubmit/bytes?apiKey=TEST45684CB2A93F41FC40869DC739BD4D126D77', {
-		  method: 'POST',
-		  body: formData
+	  fetch('https://api.recruitly.io/api/cvsubmit/bytes?apiKey=TEST45684CB2A93F41FC40869DC739BD4D126D77', {
+		method: 'POST',
+		body: formData
+	  })
+		.then(response => response.json())
+		.then(data => {
+		  // Handle the response data
+		  console.log(data);
+		  // Perform additional actions with the response, if needed
+		  // For example, display a success message to the user
+		  alert('CV submitted successfully!');
+		})
+		.catch(error => {
+		  // Handle any errors
+		  console.error(error);
+		  // Display an error message to the user
+		  alert('An error occurred while submitting the CV. Please try again later.');
 		});
-  
-		// Check if the request was successful
-		if (response.ok) {
-		  console.log('Details stored successfully!');
-		  // Reset the form
-		  fullName = '';
-		  email = '';
-		  mobile = '';
-		  file = null;
-		} else {
-		  console.error('Error storing details:', response.statusText);
-		}
-	  } catch (error) {
-		console.error('Error storing details:', error);
-	  }
 	}
   
-	function handleFileChange(event) {
-	  // Retrieve the selected file
-	  file = event.target.files[0];
+	function handleCVUpload(event) {
+	  cvFile = event.target.files[0];
 	}
+  
+	onMount(() => {
+	  // Perform initialization or other tasks after the component mounts
+	});
   </script>
   
-  <main class="container">
-	<form on:submit|preventDefault={handleSubmit}>
-	  <div class="mb-3">
-		<label for="fullName" class="form-label">Full Name:</label>
-		<input type="text" class="form-control" id="fullName" bind:value={fullName} />
+  <main>
+	<form on:submit={handleSubmit} class="container">
+	  <div class="form-group">
+		<label for="fullName">Full Name</label>
+		<input type="text" id="fullName" name="fullName" class="form-control" bind:value={formData.fullName} />
 	  </div>
-	  <div class="mb-3">
-		<label for="email" class="form-label">Email:</label>
-		<input type="email" class="form-control" id="email" bind:value={email} />
+  
+	  <div class="form-group">
+		<label for="email">Email</label>
+		<input type="email" id="email" name="email" class="form-control" bind:value={formData.email} />
 	  </div>
-	  <div class="mb-3">
-		<label for="mobile" class="form-label">Mobile:</label>
-		<input type="tel" class="form-control" id="mobile" bind:value={mobile} />
+  
+	  <div class="form-group">
+		<label for="mobile">Mobile</label>
+		<input type="tel" id="mobile" name="mobile" class="form-control" bind:value={formData.mobile} />
 	  </div>
-	  <div class="mb-3">
-		<label for="file" class="form-label">Choose File:</label>
-		<input type="file" class="form-control" id="file" on:change={handleFileChange} />
+  
+	  <div class="form-group">
+		<label for="cv">Upload CV</label>
+		<input type="file" id="cv" name="cv" class="form-control-file" on:change={handleCVUpload} />
 	  </div>
+  
 	  <button type="submit" class="btn btn-primary">Submit</button>
 	</form>
   </main>
