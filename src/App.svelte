@@ -1,5 +1,9 @@
+
+<h1 style="color:red;"> Enter details</h1>
 <script>
 	import { onMount } from 'svelte';
+	import 'bootstrap/dist/css/bootstrap.min.css'
+	
   
 	let fullName = '';
 	let email = '';
