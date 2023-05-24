@@ -1,9 +1,6 @@
-
-<h1 style="color:red;"> Enter details</h1>
 <script>
 	import { onMount } from 'svelte';
 	import 'bootstrap/dist/css/bootstrap.min.css'
-	
   
 	let fullName = '';
 	let email = '';
@@ -150,4 +147,10 @@
 	</div>
 	<button class="btn btn-primary" on:click={uploadCV}>Submit</button>
   </main>
+  
+  <style>
+	.text-danger {
+	  color: red;
+	}
+  </style>
   
