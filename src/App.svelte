@@ -1,3 +1,5 @@
+
+<h1 style="color:red;">Enter details</h1>
 <script>
 	import { onMount } from 'svelte';
 	import 'bootstrap/dist/css/bootstrap.min.css'
@@ -19,8 +21,8 @@
 	async function uploadCV() {
 	  formErrors = {};
   
-	  if (!fullName.trim()) {
-		formErrors.fullName = 'Full Name is required.';
+	  if (!isValidName(fullName.trim())) {
+		formErrors.fullName = 'Please enter a valid name with only letters.';
 	  }
   
 	  if (!email.trim()) {
@@ -70,6 +72,11 @@
 	  }
 	}
   
+	function isValidName(name) {
+	  const nameRegex = /^[A-Za-z]+$/;
+	  return nameRegex.test(name);
+	}
+  
 	function isValidEmail(email) {
 	  // Basic email validation regex
 	  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -78,7 +85,7 @@
   
 	function isValidMobile(mobile) {
 	  // Basic mobile number validation regex
-	  const mobileRegex = /^[0-9]{10}$/;
+	  const mobileRegex = /^[0-9+]{10}$/;
 	  return mobileRegex.test(mobile);
 	}
   
@@ -117,36 +124,41 @@
 	/>
   </svelte:head>
   
-  <main class="container">
-	<label>
-	  Full Name:
-	  <input type="text" class="form-control" bind:value={fullName} />
-	  {#if formErrors.fullName}
-	  <p class="text-danger">{formErrors.fullName}</p>
-	  {/if}
-	</label>
-	<label>
-	  Email:
-	  <input type="email" class="form-control" bind:value={email} />
-	  {#if formErrors.email}
-	  <p class="text-danger">{formErrors.email}</p>
-	  {/if}
-	</label>
-	<label>
-	  Mobile:
-	  <input type="tel" class="form-control" bind:value={mobile} />
-	  {#if formErrors.mobile}
-	  <p class="text-danger">{formErrors.mobile}</p>
-	  {/if}
-	</label>
-	<div class="mb-3">
-	  <input type="file" class="form-control" accept=".pdf,.doc,.docx" id="cvFileInput" on:change={handleFileChange} />
-	  {#if formErrors.cvFile}
-	  <p class="text-danger">{formErrors.cvFile}</p>
-	  {/if}
-	</div>
+  <div class="form-group">
+	<label for="firstName">First Name:</label>
+	<input type="text" class="form-control" id="firstName" bind:value={fullName} placeholder="Enter your first name" />
+	{#if formErrors.fullName}
+	<p class="text-danger">{formErrors.fullName}</p>
+	{/if}
+  </div>
+  
+  <div class="form-group">
+	<label for="email">Email:</label>
+	<input type="email" class="form-control" id="email" bind:value={email} placeholder="Enter your email" />
+	{#if formErrors.email}
+	<p class="text-danger">{formErrors.email}</p>
+	{/if}
+  </div>
+  
+  <div class="form-group">
+	<label for="mobile">Mobile:</label>
+	<input type="tel" class="form-control" id="mobile" bind:value={mobile} placeholder="Enter your mobile number" />
+	{#if formErrors.mobile}
+	<p class="text-danger">{formErrors.mobile}</p>
+	{/if}
+  </div>
+  
+  <div class="form-group">
+	<label for="cvFileInput">CV File:</label>
+	<input type="file" class="form-control" accept=".pdf,.doc,.docx" id="cvFileInput" on:change={handleFileChange} />
+	{#if formErrors.cvFile}
+	<p class="text-danger">{formErrors.cvFile}</p>
+	{/if}
+  </div>
+  
+  <div class="form-group">
 	<button class="btn btn-primary" on:click={uploadCV}>Submit</button>
-  </main>
+  </div>
   
   <style>
 	.text-danger {
