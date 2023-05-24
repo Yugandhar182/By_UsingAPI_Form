@@ -34,7 +34,7 @@
 	  if (!mobile.trim()) {
 		formErrors.mobile = 'Mobile is required.';
 	  } else if (!isValidMobile(mobile)) {
-		formErrors.mobile = 'Please enter a valid mobile number.';
+		formErrors.mobile = 'Please enter a valid  mobile number having 10 digits.';
 	  }
   
 	  if (!cvFile) {
