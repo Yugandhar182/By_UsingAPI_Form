@@ -1,4 +1,5 @@
 <script>
+	import 'bootstrap/dist/css/bootstrap.min.css';
 	let fullName = '';
 	let email = '';
 	let mobile = '';
@@ -53,9 +54,7 @@
 	}
   </script>
   
-  <style>
-	@import 'bootstrap/dist/css/bootstrap.min.css';
-  </style>
+  
   
   <main class="container">
 	<label class="form-label">
